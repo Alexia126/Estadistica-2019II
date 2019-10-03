@@ -1,0 +1,103 @@
+Práctica: Variables y frecuencia 
+
+Ejercicio 1: ¿Que clase de objeto es BIC? y ¿Qué clase de objeto es geospiza? 
+Sol: Usando la funció str() y class () se tiene
+BIC: class(BIC) [1] "function"
+     str(BIC)  function (object, ...)  
+geospiza: class(geospiza) [1] "list"
+          str(geospiza) List of 4
+ $ geospiza.tree:List of 4
+  ..$ edge       : num [1:26, 1:2] 15 16 17 18 19 20 21 22 23 24 ...
+  ..$ edge.length: num [1:26] 0.2974 0.0492 0.0686 0.134 0.1035 ...
+  ..$ Nnode      : int 13
+  ..$ tip.label  : chr [1:14] "fuliginosa" "fortis" "magnirostris" "conirostris" ...
+  ..- attr(*, "class")= chr "phylo"
+ $ geospiza.data: num [1:13, 1:5] 4.4 4.35 4.22 4.26 4.24 ...
+  ..- attr(*, "dimnames")=List of 2
+  .. ..$ : chr [1:13] "magnirostris" "conirostris" "difficilis" "scandens" ...
+  .. ..$ : chr [1:5] "wingL" "tarsusL" "culmenL" "beakD" ...
+ $ phy          :List of 4
+  ..$ edge       : num [1:26, 1:2] 15 16 17 18 19 20 21 22 23 24 ...
+  ..$ edge.length: num [1:26] 0.2974 0.0492 0.0686 0.134 0.1035 ...
+  ..$ Nnode      : int 13
+  ..$ tip.label  : chr [1:14] "fuliginosa" "fortis" "magnirostris" "conirostris" ...
+  ..- attr(*, "class")= chr "phylo"
+  
+  Ejercicio 2:  ¿Qué tipo de variable es tarsusL y qué clase? 
+Abra el objeto *tortues* y mire ¿qué tipo de variables tiene y qué clase son?, haga lo mismo con el objeto *mite.env* y revise ¿Qué tipo de variable es *shurb* y qué clase es? Recuerde siempre usar help para saber de donde vienen los datos.
+
+tortues: str(tortues) 'data.frame':	48 obs. of  4 variables:
+ $ long: num  93 94 96 101 102 103 104 106 107 112 ...
+ $ larg: num  74 78 80 84 85 81 83 83 82 89 ...
+ $ haut: num  37 35 35 39 38 37 39 39 38 40 ...
+ $ sexe: Factor w/ 2 levels "M","F": 1 1 1 1 1 1 1 1 1 1 ...
+ Tortues es un data.frame con 4 variables, tres de tipo númerico y una de tipo factor con dos niveles
+ 
+ mite.env: str(mite.env) 'data.frame':	70 obs. of  5 variables:
+ $ SubsDens : num  39.2 55 46.1 48.2 23.6 ...
+ $ WatrCont : num  350 435 372 360 204 ...
+ $ Substrate: Factor w/ 7 levels "Sphagn1","Sphagn2",..: 1 5 7 1 1 1 1 7 5 1 ...
+ $ Shrub    : Ord.factor w/ 3 levels "None"<"Few"<"Many": 2 2 2 2 2 2 2 3 3 3 ...
+ $ Topo     : Factor w/ 2 levels "Blanket","Hummock": 2 2 2 2 2 2 2 1 1 2 ...
+ 
+ shurb es una variable de tipo factor ordinal con tres niveles 
+ 
+ Ejercicio 3: Usando el data.frame *tortues* calcule la proporción de hembras y machos de la muestra
+ 
+F <- length(which(tortues == 'F'))
+F [1] 24
+M<-length(which(tortues == 'M')) 
+M [1] 24
+paste(F,'/',M,sep = '') [1] "24/24"
+F/M [1] 1
+La proporción es 1 a 1 
+
+Ejercicio 4: Usando el data.frame *tortues* calcule la proporción entre el ancho y el largo del caparazón, genere una tabla con la información de *tortues* y la nueva variable derivada.
+
+medidas<-cbind(tortues$long, tortues$larg)
+medidas
+Tabla_medidas <- as.data.frame(cbind(paste('spp',1:48,sep = '_'),medidas))
+Tabla_medidas
+colnames(Tabla_medidas) <- c('Individuos', 'Ancho','Largo')
+Tabla_medidas
+prp <- tortues$larg/tortues$long
+prp
+Tabla_medidas_prp <- cbind.data.frame(Tabla_medidas, prp)
+Tabla_medidas_prp
+
+Ejercicio 5: ¿Cuántas especies de *Corvus* fueron muestreadas en la región Paleártica-Africana? Use el data.frame del género *Corvus*. ¿Qué porcentaje de *Corvus* muestreados habitan zonas abiertas?
+
+data(corvus)
+tabla<-table(corvus$phylog)
+tabla
+amer orien  pale 
+    6    13     9 
+Nueve especies fueron muestreadas en la región paleártica-africana
+
+tabla<-table(corvus$habitat)
+freq<-prop.table(freq)
+freq
+  clos      open 
+0.3928571 0.6071429 
+El 61% de las especies habitan en lugares abiertos
+
+Ejercicio 6: ¿Cómo luce el gráfico de frecuencias para los tipos de hábitat del género *Corvus*?
+
+plot(freq, main= "Hábitat", xlab= "Tipo", ylab= "Frecuencia", col = "coral2")
+
+Ejercicio 7 :Encuentre el máximo, así como lo hizo para el mínimo para los datos atlas$birds
+
+atlas$birds
+xsp<- apply(atlas$birds,2,sum)
+xsp 
+min(xsp)[1] 2
+xsp[which.min(xsp)] Fauvette_melanocephale 
+                     2 
+max(xsp) [1] 56
+xsp[which.max(xsp)]  Fauvette_des_jardins 
+                     56 
+                  
+
+
+
+
