@@ -14,7 +14,34 @@ plot(dpois(x = 0:50,lambda = 10))
 
 ### Ejercicio 3: A partir del tortues del paquete ade4, calcule el promedio y la desviación estándar de las alturas de caparazones de las tortugas. Haga el análisis por sexo y grafíquelo.
 
+data("tortues")
+View(tortues)
+alturacap<-tortues[,3]
+mean(alturacap) #[1] 46.14583
+sd(alturacap) #[1] 8.384356
+hist(alturacap, xlab = "Frecuencia", ylab = "Altura de caparazón", main = "Altura general de caparazones", col = "slateblue3")
+
+alturamachos<- tortues$haut[which(tortues$sexe== 'M')]
+mean(alturamachos) #[1] 40.75
+sd(alturamachos) #[1] 3.352481
+hist(alturamachos, xlab = "Frecuencia", ylab = "Altura de caparazón", main = "Altura de caparazones tortugas macho", col = "aquamarine4")
+
+alturahembras<-tortues$haut[which(tortues$sexe== 'F')]
+mean(alturahembras) #[1] 51.54167
+sd(alturahembras) #[1] 8.464654
+hist(alturahembras, xlab = "Frecuencia", ylab = "Altura de caparazón", main = "Altura de caparazones tortugas hembra", col = "turquoise1")
+
 ### Ejercicio 4: Lea el artículo sobre tipos de crecimientos poblacionales y escriba el código en R que mejor describa el ejemplo de las bacterias en crecimiento exponencial.
+
+help("function")
+expobact<-function(Po, r, t) {Po*exp(r*t)}
+pop<-expobact(Po = 1000, r = log(2), t = 0:24)
+t<-0:24
+popt<-cbind(pop, t)
+View(popt)
+
+plot(pop~t, xlab="N° de individuos", ylab = "Tiempo en ciclos", main= "Modelo de crecimiento exponencial bacterias", type= "l", col= "green4" )
+
 
 ### Ejercicio 5: Simule 5000 peces de criadero en un tanque, todos son de la misma cohorte. Imagine que los organiza en fila y quiere seleccionar 100 para calcular estadísticos de la población. Haga un muestreo sistemático y calcule los estadísticos y descriptivos vistos anteriormente. Grafique.
 
@@ -28,7 +55,7 @@ K<-N/n
 K
 inicio<-sample(1:K,1)
 estrato<-seq(6,5000,50)
-sist<-tallaspeces[sist]
+sist<-tallaspeces[estrato]
 sist
 #### [1] 18.16274 14.32245 17.34800 14.40569 15.28605 19.24644 17.44177 15.91144
   [9] 12.73784 14.14300 13.75308 13.42579 16.66382 11.22119 14.79295 11.27752
