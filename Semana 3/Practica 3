@@ -1,1 +1,246 @@
+### Descriptores y medidas
+
+### Ejercicio 1: Si la columna iris$Petal.Length tuviera valores ‘NA’, ¿Cómo podría eliminarlos antes de hacer la estimación de la media?
+
+mean(x =iris$Petal.Length, na.rm = T)
+# [1] 3.758
+
+## Estime la media aritmética de la altura, la longitud y el ancho del caparazón de las tortugas pintadas [data(tortues), paquete: ade4], use la función apply para obtener los estadísticos de cada medida en un mismo vector.
+
+data("tortues")
+h<-tortues[,3]
+l<-tortues[,1]
+la<-tortues[,2]
+tort<-cbind(l,la,h)
+tortugas<-apply(X = tort, MARGIN =2 , FUN = mean, na.rm=T)
+tortugas
+#     l        la         h 
+124.68750  95.50000  46.14583 
+
+### Ejercicio 2: Genere una función propia que le permita encontrar la mediana, tal y como lo hizo con la media aritmética.
+
+mi.mediana <- function(x) {
+  
+  orden<- sort(x)
+  mi.n<-length(x)
+  mi.med <- orden[mi.n/2]
+  return(mi.med)
+}
+
+mi.mediana(x= iris$Petal.Length[which(iris$Species=='setosa')])
+#[1] 1.5
+
+### Ejercicio 3: Genere una función propia que le permita calcular la moda. Estas medidas de tendencia central podemos verlas sobre la distribución de frecuencias de frecuencia de las longitudes de pétalos de la especie Setosa.
+
+mi.moda<-function(x) {
+  
+  freq<- table(x)
+  freq2<-freq[which.max(freq)]
+  return(freq2)
+}
+ mi.moda(x= iris$Petal.Length[which(iris$Species=='setosa')]) 
+ 
+ #1.4 
+ 13 
+ ### Ejercicio 4: Después de generar la función del cálculo de moda, grafíquela sobre el histograma.
+ 
+ hist(setosa, # histogram
+ col = "peachpuff", # column color
+ border = "black", 
+ prob = TRUE, # show densities instead of frequencies
+ xlim = c(0.5,2.5),
+ xlab = "Longitud de pétalo",
+ main = "Frecuencias de longitud de pétalo de setosa")
+lines(density(setosa),
+      lwd = 2, # thickness of line
+ col = "chocolate3") # Generar la distribuciÃ³n continua distribuciÃ³n de masa a partir de los datos observados
+ 
+abline(v = mi.moda(x= iris$Petal.Length[which(iris$Species=='setosa')]) ,
+ col = "red",
+ lwd = 2)
+
+legend(x = "topright", # location of legend within plot area
+ c("Density plot", "Moda"),
+ col = c("chocolate3", "royalblue"),
+ lwd = c(2, 2))
+ 
+### Ejercicio 5: Genere los cuantiles en intervalos de 0.5 Existen otras funciones que nos permiten generar cuartiles, incluyendo información de tendencias centrales. Es decir, density() pero más resumido.
+
+quantile(setosa,probs = c(seq(0, 1, 0.5)))
+ # 0%  50% 100% 
+  1.0  1.5  1.9 
+
+### Ejercicio 6: ¿Qué sucede si el número de columnas deseado no se especifica? Obtenga la mediana, la moda y los cuantiles para cada especie de iris y para cada variable morfométrica.
+
+### Sin el número de columnas especificado se genera el calculo para todo el dataframe incluyendo valores no numéricos que generan NAs 
+
+aggregate(iris, list(Especies = iris$Species), mean)
+
+# Mediana
+aggregate(iris[,1:4], list(Especies = iris$Species), median)
+# Moda
+aggregate(iris[,1:4], list(Especies = iris$Species), mi.moda)
+
+
+### Ejercicio 7: Grafique la distribución de frecuencias de cada población usando histograma y densidad en el mismo gráfico. Adiciones la media, la mediana y la moda. 
+
+pop1 <-abs(rnorm(200,mean = 6,sd = 1))
+pop2 <-abs(rnorm(200,mean = 6,sd = 5))
+pops<-cbind(pop1,pop2)
+
+### Población 1 
+hist(pop1, # histogram
+ col = "peachpuff", # column color
+ border = "black", 
+ prob = TRUE, # show densities instead of frequencies
+ xlab = "población 1",
+ main = "Frecuencia")
+lines(density(pop1),
+      lwd = 2, # thickness of line
+ col = "chocolate3") # Generar la distribución continua distribución de masa a partir de los datos observados
+
+# Graficar las medidas 
+abline(v = mean(pop1),
+ col = "royalblue",
+ lwd = 2)
+
+abline(v = median(pop1),
+ col = "red",
+ lwd = 2)
+
+abline(v = mi.moda(pop1),
+ col = "yellow",
+ lwd = 2)
+legend(x = "topright", # location of legend within plot area
+ c("Density plot", "Mean", "Median", "Mode"),
+ col = c("chocolate3", "royalblue", "red", "yellow"),
+ lwd = c(2, 2, 2, 2))
+ 
+ ### Población 2
+ 
+hist(pop1, # histogram
+ col = "peachpuff", # column color
+ border = "black", 
+ prob = TRUE, # show densities instead of frequencies
+ xlab = "población 1",
+ main = "Frecuencia")
+lines(density(pop1),
+      lwd = 2, # thickness of line
+ col = "chocolate3") # Generar la distribución continua distribución de masa a partir de los datos observados
+
+# Graficar las medidas 
+abline(v = mean(pop1),
+ col = "royalblue",
+ lwd = 2)
+
+abline(v = median(pop1),
+ col = "red",
+ lwd = 2)
+
+abline(v = mi.moda(pop1),
+ col = "yellow",
+ lwd = 2)
+legend(x = "topright", # location of legend within plot area
+ c("Density plot", "Mean", "Median", "Mode"),
+ col = c("chocolate3", "royalblue", "red", "yellow"),
+ lwd = c(2, 2, 2, 2))
+ 
+### Ejercicio 8: Lea el resumen y las gráficas del articulo de Magund 2007. Cargue los datos llamados ‘2007_EAA_Magud_et_al_data.csv’ usando la función read.csv(). Estime todos los estadísticos vistos en esta práctica para las variables ‘body length’, ‘tubercles 1b apart’ y ‘tarsus I length’. Grafique sus análisis y exportelos usando las funciones PNG o PDF. Escriba un párrafo de no más de 200 analizando lo que encontró. Tenga en cuenta que solo describir las salidas implica descripción de resultados no análisis.
+
+datos<-read.csv("2007_EAA_Magud_et_al_data.csv")
+#Bodylenght
+bodylenght<-datos[,2]
+describe(bodylenght)
+getwd()
+jpeg("C:/Users/ADMIN/Documents/Bioinformatica/Estadística/2019-II/Semana 3/bl.jpg")
+hist(bodylenght, # histogram
+ col = "chocolate2", # column color
+ border = "black", 
+ prob = TRUE, # show densities instead of frequencies
+ xlab = "Body lenght",
+ main = "Measurements of A. anthocoptes")
+lines(density(bodylenght),
+      lwd = 2, # thickness of line
+ col = "black") # Generar la distribución continua distribución de masa a partir de los datos observados
+
+# Graficar las medidas 
+abline(v = mean(bodylenght),
+ col = "royalblue",
+ lwd = 2)
+
+abline(v = median(bodylenght),
+ col = "red",
+ lwd = 2)
+
+legend(x = "topright", # location of legend within plot area
+ c("Density plot", "Mean", "Median"),
+ col = c("black", "royalblue", "red"),
+ lwd = c(2, 2, 2))
+
+dev.off()
+
+### Tarsus I
+tarsusI<-datos$W
+describe(tarsusI)
+getwd()
+jpeg("C:/Users/ADMIN/Documents/Bioinformatica/Estadística/2019-II/Semana 3/tI.jpg")
+hist(tarsusI, # histogram
+ col = "brown", # column color
+ border = "black", 
+ prob = TRUE, # show densities instead of frequencies
+ xlab = "Tarsus I lenght",
+ main = "Measurements of A. anthocoptes")
+lines(density(tarsusI),
+      lwd = 2, # thickness of line
+ col = "black") # Generar la distribución continua distribución de masa a partir de los datos observados
+
+# Graficar las medidas 
+abline(v = mean(tarsusI),
+ col = "royalblue",
+ lwd = 2)
+
+abline(v = median(tarsusI),
+ col = "red",
+ lwd = 2)
+
+legend(x = "topright", # location of legend within plot area
+ c("Density plot", "Mean", "Median"),
+ col = c("black", "royalblue", "red"),
+ lwd = c(2, 2, 2))
+
+dev.off()
+
+### Tubercles 1B
+
+tubercles1b<-datos$P
+describe(tubercles1b)
+getwd()
+jpeg("C:/Users/ADMIN/Documents/Bioinformatica/Estadística/2019-II/Semana 3/tIB.jpg")
+hist(tubercles1b, # histogram
+ col = "lightgoldenrod4", # column color
+ border = "black", 
+ prob = TRUE, # show densities instead of frequencies
+ xlab = "Tarsus I lenght",
+ main = "Measurements of A. anthocoptes")
+lines(density(tubercles1b),
+      lwd = 2, # thickness of line
+ col = "olivedrab1") # Generar la distribución continua distribución de masa a partir de los datos observados
+
+# Graficar las medidas 
+abline(v = mean(tubercles1b),
+ col = "royalblue",
+ lwd = 2)
+
+abline(v = median(tubercles1b),
+ col = "red",
+ lwd = 2)
+
+legend(x = "topright", # location of legend within plot area
+ c("Density plot", "Mean", "Median"),
+ col = c("olivedrab4", "royalblue", "red"),
+ lwd = c(2, 2, 2))
+
+dev.off()
+
+
 
