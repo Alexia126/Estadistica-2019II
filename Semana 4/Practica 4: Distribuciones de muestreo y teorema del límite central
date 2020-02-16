@@ -1,4 +1,4 @@
-### Distribuciones de muestreo y teorema del límite central 
+### Práctica 4: Distribuciones de muestreo y teorema del límite central 
 
 ### Ejercicio 1 ¿Cuál es la probabilidad de que 3 sean de fenotipo blanco?
 dbinom(3, size = 8, prob =0.25)
