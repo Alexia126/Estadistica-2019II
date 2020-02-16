@@ -1,8 +1,8 @@
 #### Practica 5: Teorema del límite central 
 
-### 1. Ejer: Tome cualquiera de las dos poblaciones y cambie los valores de tamaño y número de muestras hasta que obtenga un histograma similar a una distribución normal.
+### Ejercicio 1: Tome cualquiera de las dos poblaciones y cambie los valores de tamaño y número de muestras hasta que obtenga un histograma similar a una distribución normal.
 
-# CuÃ¡n grande es la muestra
+# Cuán grande es la muestra?
 
 taman.muestra <-100
 
@@ -45,7 +45,7 @@ hist(Matriz.Muestras.pob1.conMean[,taman.muestra+1], main = 'medias')
 
 ### La gráfica de las medias muestra una distrubución muy similar a lo esperado en la distribución normal con el tamaño poblacional y número de muestras usado 
 
-#### Ejercicio 2. Población 2
+#### Ejercicio 2:  Población 2 y distribución normal
 taman.muestra <-100
 
 # Cuantas muestras/poblaciones
@@ -85,7 +85,7 @@ hist(Matriz.Muestras.pob1.sinMean[2,], main = 'muestra 2')
 hist(Matriz.Muestras.pob1.sinMean[3,], main = 'muestra 3')
 hist(Matriz.Muestras.pob1.conMean[,taman.muestra+1], main = 'medias')
 
-### Ejer 3.   Simule una población con distribución normal de media 15 y sd 1. ¿Cúal es el tamaño y numero de muestral,  donde obtenemos una distribución similar a la normal? Pruebe con Nmuestras 30 y tamaño 5 o 3, también podría reducir la SD. Haga lo mismo con una distribución lognormal.
+### Ejercicio 3:  Simule una población con distribución normal de media 15 y sd 1. ¿Cúal es el tamaño y numero de muestral,  donde obtenemos una distribución similar a la normal? Pruebe con Nmuestras 30 y tamaño 5 o 3, también podría reducir la SD. Haga lo mismo con una distribución lognormal.
 
 set.seed(1)
 taman.muestra <-10
@@ -129,7 +129,7 @@ hist(Matriz.Muestras.pob1.conMean[,taman.muestra+1], main = 'medias')
 
 #### Con un número de tamaño de muestras de 10 y un N de 100 además de un desviación estándar reducida se logró una distribución similar a la normal, con los valores sugeridos no se logró tal distribución 
 
-#### Ejercicio 4
+#### Ejercicio 4: Aumente la SD= 10 y disminuya el número de individuos de la población, ejemplo 1000. ¿Cuanto es el mínimo de muestras a tomar, para que la media obtenida se acerque a la media de la población?
 
 simula<-abs(rnorm(1000,10,10))
 
