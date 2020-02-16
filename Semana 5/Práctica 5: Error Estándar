@@ -1,0 +1,97 @@
+########## Práctica 6: Error estándar 
+
+### Ejercicio 1: Aumente el valor de desviación estándar y evalúe cómo cambia el error estándar.
+set.seed(999)
+### Población
+pop <- ceiling(rnorm(5000, mean = 35,sd = 10))
+### Número de muestras y N de cada muestra 
+m1 <- sample(x = pop,size = 10, replace = T)
+m2 <- sample(x = pop,size = 10, replace = T)
+m3 <- sample(x = pop,size = 10, replace = T)
+
+### Media, desviación  y EE
+mean(m1)
+sd(m1)
+sd(m1)/sqrt(length(m1))
+
+mean(m2)
+sd(m2)
+sd(m2)/sqrt(length(m2))
+
+mean(m3)
+sd(m3)
+sd(m3)/sqrt(length(m3))
+
+# Error estandar 
+
+sd(c(m1,m2,m3))/sqrt(length(c(m1,m2,m3)))
+### [1] 1.798137 El EE aumenta
+
+
+### Ejercicio 2: Aumente el tamaño de la muestra y evalúe cómo cambia el error estándar.
+set.seed(999)
+# Población
+pop <- c(ceiling(rnorm(3500, mean = 30,sd = 3)), ceiling(runif(500, 45,51)))
+myhist <- hist(pop)
+multiplier <- myhist$counts / myhist$density
+mydensity <- density(pop)
+mydensity$y <- mydensity$y * multiplier[1]
+plot(myhist)
+lines(mydensity)
+### Número de muestras y N de cada muestra 
+m1 <- sample(x = pop,size = 10, replace = T) 
+m2 <- sample(x = pop,size = 10, replace = T)
+m3 <- sample(x = pop,size = 10, replace = T)
+### El tamaño de la muestra fue aumentado de 5 ind a 10 ind 
+
+# Calcular media, desviaciÃ³n y error
+mean(m1)
+sd(m1)
+sd(m1)/sqrt(length(m1))
+
+mean(m2)
+sd(m2)
+sd(m2)/sqrt(length(m2))
+
+mean(m3)
+sd(m3)
+sd(m3)/sqrt(length(m3))
+
+# Error estandar 
+sd(c(m1,m2,m3))/sqrt(length(c(m1,m2,m3)))
+### [1] 1.08589 El EE disminuye al aumentar el tamaño del muestreo 
+
+### Ejercicio 3: Cambie el tamaño de muestra y evalúe el valor de error estándar. ¿Cuánto debería aumentar la muestra para que el error estándar disminuya a la mitad?
+
+### Teniendo en cuenta que los valores originales de N= 5 ind, con una SD= 3 el EE es de 4.582576, para que se reduzca a la mitad debe aumentarse cuatro veces el tamaño de N 
+set.seed(999)
+# Población
+pop <- c(ceiling(rnorm(3500, mean = 30,sd = 3)), ceiling(runif(500, 45,51)))
+myhist <- hist(pop)
+multiplier <- myhist$counts / myhist$density
+mydensity <- density(pop)
+mydensity$y <- mydensity$y * multiplier[1]
+plot(myhist)
+lines(mydensity)
+### Número de muestras y N de cada muestra 
+m1 <- sample(x = pop,size = 20, replace = T) 
+m2 <- sample(x = pop,size = 20, replace = T)
+m3 <- sample(x = pop,size = 20, replace = T)
+
+
+# Calcular media, desviaciÃ³n y error
+mean(m1)
+sd(m1)
+sd(m1)/sqrt(length(m1))
+
+mean(m2)
+sd(m2)
+sd(m2)/sqrt(length(m2))
+
+mean(m3)
+sd(m3)
+sd(m3)/sqrt(length(m3))
+
+# Error estandar 
+sd(c(m1,m2,m3))/sqrt(length(c(m1,m2,m3)))
+### [1] 0.7146931, El EE disminuye a más de la mitad cuando se aumenta N cuatro veces 
