@@ -1,0 +1,156 @@
+#### Practica 5: Teorema del límite central 
+
+### 1. Ejer: Tome cualquiera de las dos poblaciones y cambie los valores de tamaño y número de muestras hasta que obtenga un histograma similar a una distribución normal.
+
+# CuÃ¡n grande es la muestra
+
+taman.muestra <-100
+
+# Cuantas muestras/poblaciones
+
+Nmuestras <-1000
+
+# Genero una matriz donde se colocarÃ¡ todas las muestras tomadas de la poblaciÃ³n 2
+Matriz.Muestras.pob1.sinMean <- matrix(NA, nrow = Nmuestras, ncol = taman.muestra)
+
+
+for (i in 1:Nmuestras){
+  muestra <- runif(taman.muestra)
+  Matriz.Muestras.pob1.sinMean [i,]=muestra
+}
+
+# Sale la matriz sin media
+
+Matriz.Muestras.pob1.sinMean
+
+# Calculo la media
+meansX <- apply(Matriz.Muestras.pob1.sinMean, 2, mean)
+
+meansX
+
+# La adiciono a la tabla
+
+Matriz.Muestras.pob1.conMean <- cbind(Matriz.Muestras.pob1.sinMean,meansX)
+
+Matriz.Muestras.pob1.conMean
+
+
+# Histograma de las medias
+
+par(mfrow=c(2,2))
+hist(Matriz.Muestras.pob1.sinMean[1,], main = 'muestra 1')
+hist(Matriz.Muestras.pob1.sinMean[2,], main = 'muestra 2')
+hist(Matriz.Muestras.pob1.sinMean[3,], main = 'muestra 3')
+hist(Matriz.Muestras.pob1.conMean[,taman.muestra+1], main = 'medias')
+
+### La gráfica de las medias muestra una distrubución muy similar a lo esperado en la distribución normal con el tamaño poblacional y número de muestras usado 
+
+#### Ejercicio 2. Población 2
+taman.muestra <-100
+
+# Cuantas muestras/poblaciones
+
+Nmuestras <-1000
+
+# Genero una matriz donde se colocarÃ¡ todas las muestras tomadas de la poblaciÃ³n 2
+Matriz.Muestras.pob1.sinMean <- matrix(NA, nrow = Nmuestras, ncol = taman.muestra)
+
+
+for (i in 1:Nmuestras){
+  muestra <- rexp(taman.muestra)
+  Matriz.Muestras.pob1.sinMean [i,]=muestra
+}
+
+# Sale la matriz sin media
+
+Matriz.Muestras.pob1.sinMean
+
+# Calculo la media
+meansX <- apply(Matriz.Muestras.pob1.sinMean, 2, mean)
+
+meansX
+
+# La adiciono a la tabla
+
+Matriz.Muestras.pob1.conMean <- cbind(Matriz.Muestras.pob1.sinMean,meansX)
+
+Matriz.Muestras.pob1.conMean
+
+
+# Histograma de las medias
+
+par(mfrow=c(2,2))
+hist(Matriz.Muestras.pob1.sinMean[1,], main = 'muestra 1')
+hist(Matriz.Muestras.pob1.sinMean[2,], main = 'muestra 2')
+hist(Matriz.Muestras.pob1.sinMean[3,], main = 'muestra 3')
+hist(Matriz.Muestras.pob1.conMean[,taman.muestra+1], main = 'medias')
+
+### Ejer 3.   Simule una población con distribución normal de media 15 y sd 1. ¿Cúal es el tamaño y numero de muestral,  donde obtenemos una distribución similar a la normal? Pruebe con Nmuestras 30 y tamaño 5 o 3, también podría reducir la SD. Haga lo mismo con una distribución lognormal.
+
+set.seed(1)
+taman.muestra <-10
+
+# Cuantas muestras/poblaciones
+
+Nmuestras <-100
+
+# Genero una matriz donde se colocarÃ¡ todas las muestras tomadas de la poblaciÃ³n 2
+Matriz.Muestras.pob1.sinMean <- matrix(NA, nrow = Nmuestras, ncol = taman.muestra)
+
+
+for (i in 1:Nmuestras){
+  muestra <- rnorm(n = taman.muestra, mean = 15, sd = 0.5)
+  Matriz.Muestras.pob1.sinMean [i,]=muestra
+}
+
+# Sale la matriz sin media
+
+Matriz.Muestras.pob1.sinMean
+
+# Calculo la media
+meansX <- apply(Matriz.Muestras.pob1.sinMean, 2, mean)
+
+meansX
+
+# La adiciono a la tabla
+
+Matriz.Muestras.pob1.conMean <- cbind(Matriz.Muestras.pob1.sinMean,meansX)
+
+Matriz.Muestras.pob1.conMean
+
+
+# Histograma de las medias
+
+par(mfrow=c(1,1))
+hist(Matriz.Muestras.pob1.sinMean[1,], main = 'muestra 1')
+hist(Matriz.Muestras.pob1.sinMean[2,], main = 'muestra 2')
+hist(Matriz.Muestras.pob1.sinMean[3,], main = 'muestra 3')
+hist(Matriz.Muestras.pob1.conMean[,taman.muestra+1], main = 'medias')
+
+#### Con un número de tamaño de muestras de 10 y un N de 100 además de un desviación estándar reducida se logró una distribución similar a la normal, con los valores sugeridos no se logró tal distribución 
+
+#### Ejercicio 4
+
+simula<-abs(rnorm(1000,10,10))
+
+
+head(simula)
+## [1] 10.48338  8.18101 11.85561 11.18748 10.24215 12.27675
+# Media poblacional real
+Xpob <- mean(simula)
+
+Xpob
+## [1] 9.998529
+# Número de muestras
+muestreo <- c(3,5,10,15,20,25,30,50,60,100,200,700)
+
+means<-NULL
+for(i in 1:length(muestreo)){
+  muestra<-sample(simula,muestreo[i],replace = F)
+  means<-c(means,mean(muestra))
+}
+
+plot(cbind(muestreo,means),type = "l")
+abline(h = Xpob,col="red")
+
+### El número mínimo de muestras a tomar para que se acerque a la media de la población puede encontrarse en seis posiciones distintas antes de 100 muestras, como se observa en la gráfica. 
