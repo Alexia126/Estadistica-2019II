@@ -1,0 +1,175 @@
+######## ESTUDIO BIOMÉTRICO Y MORFOLÓGICO DE LOS HUEVOS DE Palaemonetes varzans 
+# Generar la poblaciÃ³n
+Sevilla<-(rnorm(5000, mean = 3.5,sd = 0.18))
+Huelva<- (rnorm(5000, mean = 3.7,sd = 0.20))
+
+### Ver la población 
+## Sevilla 
+myhist <- hist(Sevilla)
+multiplier <- myhist$counts / myhist$density
+mydensity <- density(Sevilla)
+mydensity$y <- mydensity$y * multiplier[1]
+
+plot(myhist)
+lines(mydensity)
+
+### Huelva 
+myhist <- hist(Huelva)
+multiplier <- myhist$counts / myhist$density
+mydensity <- density(Huelva)
+mydensity$y <- mydensity$y * multiplier[1]
+
+plot(myhist)
+lines(mydensity)
+###### Muestreos
+
+#### Sevilla 
+m1 <- sample(x = Sevilla,size = 30, replace = T)
+m2 <- sample(x = Sevilla,size = 30, replace = T)
+m3<-sample(x = Sevilla,size = 30, replace = T)
+#### Huelva 
+m4 <- sample(x = Huelva,size = 30, replace = T)
+m5 <- sample(x = Huelva,size = 30, replace = T)
+m6<-sample(x = Huelva,size = 30, replace = T)
+
+# Calcular media, desviaciÃ³n y error
+#### Sevilla 
+mean(m1)
+sd(m1)
+sd(m1)/sqrt(length(m1))
+
+mean(m2)
+sd(m2)
+sd(m2)/sqrt(length(m2))
+
+mean(m3)
+sd(m3)
+sd(m3)/sqrt(length(m3))
+
+### Huelva
+mean(m4)
+sd(m4)
+sd(m4)/sqrt(length(m4))
+
+mean(m5)
+sd(m5)
+sd(m5)/sqrt(length(m5))
+
+mean(m6)
+sd(m6)
+sd(m6)/sqrt(length(m6))
+
+# Boxplot
+## Sevilla
+boxplot(cbind(m1,m2,m3))
+### Huelva
+boxplot(cbind(m4,m5,m6))
+
+
+# Graficar las muestras tomadas
+muestras <- c(m1,m2,m3)
+muestras <- c(m4,m5,m6)
+mean(muestras)
+sd(muestras)
+myhist <- hist(muestras)
+multiplier <- myhist$counts / myhist$density
+mydensity <- density(muestras)
+mydensity$y <- mydensity$y * multiplier[1]
+
+plot(myhist)
+lines(mydensity)
+# Error estÃ¡ndar 
+## Sevilla
+sd(c(m1,m2,m3))/sqrt(length(c(m1,m2,m3)))
+
+## Sevilla
+sd(c(m4,m5,m6))/sqrt(length(c(m4,m5,m6)))
+
+#### Volumen de los huevos
+Sevilla<-(rnorm(5000, mean = 0.593,sd = 0.081))
+Huelva<- (rnorm(5000, mean = 0.527,sd = 0.092))
+
+### Ver la población 
+## Sevilla 
+myhist <- hist(Sevilla)
+multiplier <- myhist$counts / myhist$density
+mydensity <- density(Sevilla)
+mydensity$y <- mydensity$y * multiplier[1]
+
+plot(myhist)
+lines(mydensity)
+
+### Huelva 
+myhist <- hist(Huelva)
+multiplier <- myhist$counts / myhist$density
+mydensity <- density(Huelva)
+mydensity$y <- mydensity$y * multiplier[1]
+
+plot(myhist)
+lines(mydensity)
+###### Muestreos
+
+#### Sevilla 
+m1 <- sample(x = Sevilla,size = 30, replace = T)
+m2 <- sample(x = Sevilla,size = 30, replace = T)
+m3<-sample(x = Sevilla,size = 30, replace = T)
+#### Huelva 
+m4 <- sample(x = Huelva,size = 30, replace = T)
+m5 <- sample(x = Huelva,size = 30, replace = T)
+m6<-sample(x = Huelva,size = 30, replace = T)
+
+# Calcular media, desviaciÃ³n y error
+#### Sevilla 
+mean(m1)
+sd(m1)
+sd(m1)/sqrt(length(m1))
+
+mean(m2)
+sd(m2)
+sd(m2)/sqrt(length(m2))
+
+mean(m3)
+sd(m3)
+sd(m3)/sqrt(length(m3))
+
+### Huelva
+mean(m4)
+sd(m4)
+sd(m4)/sqrt(length(m4))
+
+mean(m5)
+sd(m5)
+sd(m5)/sqrt(length(m5))
+
+mean(m6)
+sd(m6)
+sd(m6)/sqrt(length(m6))
+
+# Boxplot
+## Sevilla
+boxplot(cbind(m1,m2,m3))
+### Huelva
+boxplot(cbind(m4,m5,m6))
+
+
+# Graficar las muestras tomadas
+par(mfrow=c(1,2))
+muestras1 <- c(m1,m2,m1)
+muestras2<-c(m4,m5,m6)
+mean(muestras)
+sd(muestras)
+myhist <- hist(muestras1, ylab = "Individuos", xlab = "Talla (cm)", main =  " Talla para Sevilla", col = "coral3")
+myhist <- hist(muestras2, ylab = "Individuos", xlab = "Talla (cm)", main =  " Talla para Huelva", col = "coral3")
+multiplier <- myhist$counts / myhist$density
+mydensity <- density(muestras)
+mydensity$y <- mydensity$y * multiplier[1]
+
+plot(myhist)
+lines(mydensity)
+mean(muestras)
+# Error estÃ¡ndar 
+## Sevilla
+sd(c(m1,m2,m3))/sqrt(length(c(m1,m2,m3)))
+### Huelva 
+
+sd(c(m4,m5,m6))/sqrt(length(c(m4,m5,m6)))
