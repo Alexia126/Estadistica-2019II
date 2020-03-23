@@ -1,0 +1,232 @@
+############## Práctica Anova
+
+#### Ejercicio 1: Vuelve a realizar el estimación sin eliminar outliers. Evalúe supuesto de la anova en la variable peso. ¿Qué encuentra? ¿Qué supuesto no se cumple? Si no se cumple algún supuesto ¿Qué debería probar antes de pensar en una prueba no paramétrica?
+
+data("PlantGrowth")
+
+
+head(PlantGrowth)
+
+levels(PlantGrowth$group)
+
+summarise(.data = group_by(PlantGrowth, group),
+          count = n(),
+          mean = mean(weight, na.rm = TRUE),
+          sd = sd(weight, na.rm = TRUE)
+)
+
+### Supuestos para realizar anova
+
+## Normalidad 
+
+### Exploración visual 
+boxplot(PlantGrowth$weight~PlantGrowth$group)
+qqplot(PlantGrowth$weight~PlantGrowth$group)
+
+### Test de Shapiro-wilk
+shapiro.test(PlantGrowth$weight)## se usa porque n <50
+### p-value = 0.8915, se acepta normalidad de los datos
+
+##### Homocedasticidad 
+
+## test de levene
+leveneTest(PlantGrowth$weight~PlantGrowth$group)
+#### 0.3412, las varianzas se consideran homogeneas 
+
+######### El único supuesto que no se cumple para realizar la anova es la ausencia de outliers, normalidad y homocedasticidad se cumplen. 
+
+
+anovaconoutliers <- aov(PlantGrowth$weight ~ PlantGrowth$group)
+summary(anovaconoutliers)
+#### Con outliers
+    ### p = 0.0159
+### Sin outliers p = 0.00256
+
+############ A pesar de que el valor de F y p varian un poco al hacer el test con o sin outliers, ambos valores caen en la zona de rechazo de la hipótesis nula, evidenciando que las medias para la variable crecimiento son diferentes para cada grupo evaluado. 
+  
+###### Para darle robustes al resultado de la ANOVA podrían transformarse los outliers, pero debido a que los datos son normales y homocedásticos son criterios de peso suficiente para no usar un test no paramétrico. 
+  
+  
+####Ejercicio 2: Lea los datos de morphological_data.csv. Haga una análisis de varianza para la primera variable de medida 'BL'. Recuerde que para realizar un análisis de varianza debe evaluar los supuesto de la prueba###. 
+
+
+morfo<-read.csv(file = "morfo_data.csv", sep = ",")
+
+View(morfo)
+
+head(morfo)
+
+levels(morfo$COUNTRY)
+
+
+
+### Normalidad 
+
+### Usando la técnica de QQplot
+
+ggplot(morfo, aes(sample = BL, colour = GENDER)) +
+  stat_qq() +
+  stat_qq_line()
+
+
+### Como las observaciones sobrepasan las 50, se aconseja usar la modificación de Lillie-fors al test Kolmogorov-Smirnov
+
+lillie.test(x = morfo$BL)
+####data:  data$BL D = 0.028572, p-value = 0.1847
+
+### Test de homocedasticidad 
+
+ggplot(data = data, aes(x = GENDER, y = BL, colour = COUNTRY)) +
+  geom_boxplot() +
+  geom_point() +
+  theme_bw() +
+  theme(legend.position = "none")
+
+aggregate(BL~GENDER, data = data, FUN = var)
+
+########## debido a las características de los datos se decidió usar un test de Levenne 
+
+leveneTest(data$BL ~ data$GENDER)
+#### Levene's Test for Homogeneity of Variance (center = median) Df F value Pr(>F) group   1  0.1289 0.7197 691  
+#### Se acepta la Ho, por lo tanto ambas variables con homocedásticas entre si. Por lo tanto podría usarse un ANOVA de una vía para hacer las comparaciones entre grupos.
+
+
+#### Transformaciones 
+### Teniendo en cuenta que la variable no es normal, se usará el test de tukey para evaluar que tipo de transformación es la más adecuada para nuestros datos 
+T_tuk =  transformTukey(data$BL)
+
+### Según los resultados del test se recomienda un transformación X^lambda 
+## lambda     W Shapiro.p.value 
+## 477    1.9 0.998          0.5772
+
+lambda<- 1.9
+
+Bltrans<- morfo$BL^lambda
+
+```
+####### Test de hipótesis 
+
+####### Se quieren observar si hay diferencias entre géneros para la variable BL, con los datos transformados y normalizados es posible realizar un test de ANOVA
+
+anovBL <- aov(Bltrans ~ data$GENDER)
+summary(anovBL)
+
+
+### El resultado del test nos dice que si hay diferencias entre los géneros dado BL, 
+
+### Test de post-hoc
+
+##Debido a que se transformó la variable es posible usa Tukey para ver las diferencias entre los grupos ya que se cumplen todos los supuestos que Tukey necesita 
+
+TukeyHSD(anovBL)
+
+### Cómo solo se estan usando dos grupos, no es necesario aplicar este test
+
+
+######## Ejercicio 3: ¿Qué otro tipo de Anovas existen? 
+### Existen diferentes tipos de anova dadas ciertas categorías como, si el número de factores o sin estos vienen anidados. El tipo de modelo que evalua la interacción, puede ser de efecto fijo o de efecto aleatório que es una forma de evaluar la cantidad de variación en una variable dependiente que seasocia con una o más variables de efectos aleatorios. También existen modificaciones al test por el numero de variable que se evaluan, esta se conoce como MANOVA y es una extensión del análisis de la varianza o ANOVA para cubrir los casos donde hay más de una variable dependiente que no pueden ser combinadas de manera simple.
+
+###¿Es lo mismo dos factores que anidado? 
+### No, no es lo mismo, los factores son variables respuesta o predictoras (independientes) y los factores con niveles anidados se tienen cuando los niveles de un factor son similares pero no idénticos, y cada uno ocurre en combinación con diferentes niveles del otro factor.
+
+##"¿Cuál es el caso de los niveles de azúcar en los nectarios de gulupa y la maracuya? Haga el análisis de varianza para este caso.
+
+Input = ("
+Var Fase  Azucarmg
+Gulupa  F1  0.97
+Gulupa  F2  8.25
+Gulupa  F3  35.34
+Gulupa  F4  32.14
+Gulupa  F1  0.97
+Gulupa  F2  8.25
+Gulupa  F2  12.56
+Gulupa  F2  6.25
+Gulupa  F2  8.36
+Gulupa  F2  4.852
+Gulupa  F2  11.2
+Gulupa  F2  8.56
+Gulupa  F1  1.2
+Gulupa  F1  0.5
+Gulupa  F1  0.35
+Gulupa  F1  0.89
+Gulupa  F1  0.96
+Gulupa  F3  25.34
+Gulupa  F3  39.35
+Gulupa  F3  30.23
+Gulupa  F3  34.2
+Gulupa  F3  30.25
+Gulupa  F3  38.26
+Gulupa  F3  33.5
+Gulupa  F3  33.5
+Gulupa  F4  31.25
+Gulupa  F4  37.25
+Gulupa  F4  28.36
+Maracuya    F1  0.5
+Maracuya    F1  0.3
+Maracuya    F1  0.2
+Maracuya    F2  5.6
+Maracuya    F2  8.3
+Maracuya    F2  6.5
+Maracuya    F2  4.2
+Maracuya    F2  6.32
+Maracuya    F2  5.25
+Maracuya    F3  19.8
+Maracuya    F3  14.2
+Maracuya    F3  21.3
+Maracuya    F3  22.5
+Maracuya    F3  22.65
+Maracuya    F4  35.2
+Maracuya    F4  32.54
+Maracuya    F4  35.25
+Maracuya    F4  30.25
+")
+
+
+# Asignar datos
+Data = read.table(textConnection(Input),header=TRUE)
+
+
+Data
+
+str(Data)
+summary(Data)
+head(Data)
+
+levels(Data$Var)
+summarise(.data = group_by(Data, Var),
+          count = n(),
+          mean = mean(Azucarmg, na.rm = TRUE),
+          sd = sd(Azucarmg, na.rm = TRUE)
+)
+
+##### Prueba de normalidad 
+boxplot(Data$Azucarmg~Data$Var*Data$Fase, col="red",main="Boxplot Interación entre Azucar y variedad de planta", Xlab="Factores",ylab="Mg Azucar")
+
+### Test de Shapiro-wilk
+shapiro.test(Data$Azucarmg)## se usa porque n <50
+### p-value = 7.935e-05, se rechaza normalidad de los datos
+
+##### Homocedasticidad 
+
+## test de levene
+leveneTest(Data$Azucarmg~Data$Var)
+#### 0.2603, las varianzas se consideran homogeneas 
+
+######### Transformación 
+T_tuk =  transformTukey(Data$Azucarmg)
+lambda<-0.45
+
+transazmg<-Data$Azucarmg^lambda
+
+#### Modelos aditivos para anova con dos factores
+anova<- aov(transazmg~Data$Var+Data$Fase%in%transazmg)
+anova
+summary(anova)#### Se rechaza Ho, hay diferencias entre los grupos segun el modelo usado
+
+#### Con modelo total
+modelo_total<- lm(transazmg~Data$Var+Data$Fase%in%transazmg)
+summary(modelo_total)
+##### Con modelo interactivo 
+interaction.plot (Data$Azucarmg, Data$Var, Data$Fase,col="red",main="Modelo con Interacción")
+
+
